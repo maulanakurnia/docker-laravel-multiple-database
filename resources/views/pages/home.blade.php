@@ -5,11 +5,11 @@
                 <div class="items-center hidden space-x-3 md:flex">
                     <!-- avatar button -->
                     <div class="relative" x-data="{ isOpen: false }">
-                        <button @click="isOpen = !isOpen" class="p-1 bg-gray-200 rounded-full focus:outline-none focus:ring">
-                            <img
-                            class="object-cover w-8 h-8 rounded-full"
-                            src="https://avatars0.githubusercontent.com/u/57622665?s=460&u=8f581f4c4acd4c18c33a87b3e6476112325e8b38&v=4"
-                            alt="Ahmed Kamel"/>
+                        <button @click="isOpen = !isOpen" class="p-1 bg-gray-200 rounded-full focus:outline-none">
+                            @php
+                                $name           = implode(' ', array_slice(explode(' ', Auth::user()->name), 0, 2));
+                            @endphp
+                            <img class="object-cover w-8 h-8 rounded-full" src="https://ui-avatars.com/api/?name={{$name}}&color=6dbda1&background=bcf0da" alt="{{ $name }}" aria-hidden="true" />
                         </button>
                         <!-- green dot -->
                         <div class="absolute right-0 p-1 bg-green-400 rounded-full bottom-3 animate-ping"></div>
