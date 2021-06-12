@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www
+
+    volumes:
+      - ./:/var/www
+      - ./.docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+    networks:
+      - app-network
+
+    depends_on:
+      - pgdb
+      - mariadb
+
+    links:
+      - pgdb
+      - mariadb
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+
+    ports:
+      - "80:80"
+      - "8143:443"
+
+    volumes:
+      - ./:/var/www
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+
+    networks:
+      - app-network
+
+    depends_on:
+      - app
+
+  pgdb:
+    restart: always
+    image: postgres
+    container_name: pgdb
+    volumes:
+      - "./storage/app/public/postgres:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+    expose:
+      - 5432
+    ports:
+      - "6543:5432"
+    networks:
+      - app-network
+
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - "./storage/app/public/mariadb:/var/lib/mysql"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

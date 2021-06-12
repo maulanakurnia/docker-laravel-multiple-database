@@ -1,0 +1,12 @@
+# build 
+docker-compose build
+
+# Up
+docker-compose Up
+
+# migration
+docker-compose exec app php artisan migrate
+
+# down volume
+sudo docker-compose down --volumes                                                                                    
+sudo docker-compose down --rmi all --volumes
