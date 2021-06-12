@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Query\Expression;
 
 class CreateTasksTable extends Migration
 {
@@ -13,11 +14,12 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->text('description')->default('');
-            $table->boolean('completed')->default(false);
+        Schema::connection('mysql')->create('tasks', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->longText('body');
+            $table->dateTime('published_on')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::connection('mysql')->dropIfExists('posts');
     }
 }
