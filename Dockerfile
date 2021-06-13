@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:7.4.1-apache
 
 COPY composer.lock composer.json /var/www/
 
@@ -6,56 +6,44 @@ WORKDIR /var/www
 
 # Install extensions
 RUN apt-get update && apt-get install -y --no-install-recommends \ 
-        libssl-dev \ 
+        libpng-dev \
         zlib1g-dev \
-        curl \
-        git \
-        unzip \ 
-        netcat \
         libxml2-dev \
-        libpq-dev \
         libzip-dev \
-        sudo \
-        ssh \
+        libonig-dev \
+        libpq-dev \
+        zip \
+        curl \
+        unzip \
     && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh \
     && bash nodesource_setup.sh \
-    && sudo apt-get install -y nodejs \
-    && pecl install apcu \
-    && docker-php-ext-configure \ 
-        pgsql -with-pgsql=/usr/local/pgsql \
+    && apt-get install -y nodejs \
+    && docker-php-ext-configure gd \
     && docker-php-ext-install \
-        -j$(nproc) \
+        -j$(nproc) gd \
         zip \
-        opcache \
-        intl \
-        pdo_pgsql \
         pgsql \
         mysqli \
-        pdo_mysql \
-    && docker-php-ext-enable \
-        apcu \
+        pdo \
         pdo_pgsql \
-        sodium \
-        mysqli \
+        pdo_mysql \
+    && docker-php-source delete \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN npm i npm@latest -g
 
-# Add user for laravel
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+COPY .docker/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+
 
 # Copy application folder
+EXPOSE 80
 COPY . /var/www
+RUN a2enmod rewrite
+RUN chmod -R 777 /var/www
 
-# Copy existing permissions from folder to docker
-COPY --chown=www:www . /var/www
-RUN chown -R www-data:www-data /var/www
-
-# change current user to www
-USER www
-
-EXPOSE 9000
-CMD ["php-fpm"]
+RUN service apache2 restart
