@@ -38,8 +38,6 @@ COPY .docker/apache2/sites-available/000-default.conf /etc/apache2/sites-availab
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-
-
 # Copy application folder
 EXPOSE 80
 COPY . /var/www

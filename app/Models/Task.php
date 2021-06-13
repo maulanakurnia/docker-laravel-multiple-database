@@ -12,6 +12,12 @@ class Task extends Model
     protected $connection = 'mysql';
     protected $primaryKey = 'id';
 
+    protected $fillable = [
+        'user_id', 
+        'title', 
+        'is_complete'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'pgsql.id');

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AuthController, HomeController};
+use App\Http\Controllers\{AuthController, HomeController, TaskController};
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,13 +21,18 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::get('signup', [AuthController::class, 'showFormRegister'])->name('register');
 Route::post('signup', [AuthController::class, 'register']);
 
-// Route::get('/signup', function () {
-//     return view('pages.signup');
-// });
+Route::get('/signup', function () {
+    return view('pages.signup');
+});
+
 
 Route::group(['middleware' => 'auth'], function () {
- 
-    Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::resource('tasks', TaskController::class)->only([
+        'index', 'store', 'update', 'destroy', 'edit'
+    ]);
+
+    Route::post('updateTask',[TaskController::class, 'updateTask'])->name('tasks.updateTask');
  
 });

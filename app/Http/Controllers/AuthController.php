@@ -14,7 +14,7 @@ class AuthController extends Controller
     public function showFormLogin()
     {
         if (Auth::check()) { 
-            return redirect()->route('home');
+            return redirect()->route('tasks.index');
         }
         return view('pages.signin');
     }
@@ -35,7 +35,7 @@ class AuthController extends Controller
   
         $validator = Validator::make($request->all(), $rules, $messages);
   
-        if($validator->fails()){
+        if($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
   
@@ -47,7 +47,7 @@ class AuthController extends Controller
         Auth::attempt($data);
   
         if (Auth::check()) {
-            return redirect()->route('home');
+            return redirect()->route('tasks.index');
   
         } else {
             Session::flash('error', 'The email or password is incorrect');
@@ -93,10 +93,10 @@ class AuthController extends Controller
         $save = $user->save();
   
         if($save){
-            Session::flash('success', 'Register berhasil! Silahkan login untuk mengakses data');
+            Session::flash('success', 'Register successful! Please login to access data');
             return redirect()->route('login');
         } else {
-            Session::flash('errors', ['' => 'Register gagal! Silahkan ulangi beberapa saat lagi']);
+            Session::flash('errors', ['' => 'Registration failed! Please repeat in a moment']);
             return redirect()->route('pages.signup');
         }
     }
