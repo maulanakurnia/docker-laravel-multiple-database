@@ -37,16 +37,6 @@ class User extends Authenticatable
         'password',
     ];
 
-    /**
-     * Set and encrypt the password attribute.
-     *
-     * @param $value
-     */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
-
     public function tasks()
     {
         return $this->hasMany(Task::class);
