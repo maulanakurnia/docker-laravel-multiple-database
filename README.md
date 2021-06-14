@@ -3,7 +3,7 @@ final project of cloud computing practice
 
 ## Author
 
-| NIM         | Description |
+| NIM         | Name |
 | :---:       | :----   |
 | 123180176   | Maulana Kurnia Fiqih Ainul Yaqin |
 | 123180171   | Demas Arvin Purba Angga |
