@@ -92,6 +92,7 @@
                 </p>
             </div>
             <div class="border-t border-gray-200">
+                @if(count($tasks) > 0)
                 <table class="w-full">
                     @foreach ($tasks as $task)
                         <tr class="hover:bg-gray-50 border-b border-gray-100 cursor-pointer">
@@ -130,7 +131,11 @@
                         </tr>
                     @endforeach
                 </table>
-
+                @else
+                <div class="p-4 text-center text-gray-500">
+                    <span>any new task will appear here</span>
+                </div>
+                @endif
                 {{ $tasks->links() }}
             </div>
         </div>
