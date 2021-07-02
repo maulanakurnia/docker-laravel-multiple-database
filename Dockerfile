@@ -36,12 +36,11 @@ RUN npm i npm@latest -g
 
 COPY .docker/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 # Copy application folder
 EXPOSE 80
 COPY . /var/www
 RUN a2enmod rewrite
 RUN chmod -R 777 /var/www
 
+RUN composer install
 RUN service apache2 restart
