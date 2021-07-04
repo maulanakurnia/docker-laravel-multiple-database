@@ -3,10 +3,12 @@ version: '3.7'
 services:
   app:
     build: .
+    expose: 
+      - 80
     ports:
       - 8080:80
-
     restart: unless-stopped
+    container_name: app
     tty: true
     working_dir: /var/www
     networks:
@@ -20,8 +22,8 @@ services:
       - mariadb
 
   pgdb:
-    restart: always
     image: postgres
+    restart: always
     container_name: pgdb
     volumes:
       - "./storage/app/public/postgres:/var/lib/postgresql/data"

@@ -18,25 +18,25 @@ class TaskSeeder extends Seeder
             'id'                => '1',
             'user_id'           => '1',
             'title'             => 'Create Database',
-            'body'              => 'lorem ipsum'
+            'is_complete'       => true
         ]);
 
         Task::insert([
             'user_id'           => '1',
             'title'             => 'Create UI/UX',
-            'body'              => 'lorem ipsum'
+            'is_complete'       => false
         ]);
 
         Task::insert([
             'user_id'           => '1',
             'title'             => 'Coding',
-            'body'              => 'lorem ipsum'
+            'is_complete'       => false
         ]);
 
         Task::insert([
             'user_id'           => '2',
             'title'             => 'Go To Holiday',
-            'body'              => 'lorem ipsum'
+            'is_complete'       => false
         ]);
     }
 }

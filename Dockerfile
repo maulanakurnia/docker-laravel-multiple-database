@@ -1,9 +1,5 @@
 FROM php:7.4.1-apache
 
-COPY composer.lock composer.json /var/www/
-
-WORKDIR /var/www
-
 # Install extensions
 RUN apt-get update && apt-get install -y --no-install-recommends \ 
         libpng-dev \
@@ -15,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         zip \
         curl \
         unzip \
+        git \
     && curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh \
     && bash nodesource_setup.sh \
     && apt-get install -y nodejs \
@@ -37,10 +34,10 @@ RUN npm i npm@latest -g
 COPY .docker/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Copy application folder
-EXPOSE 80
 COPY . /var/www
 RUN a2enmod rewrite
-RUN chmod -R 777 /var/www
+RUN chown -R www-data: /var/www
 
-RUN composer install
 RUN service apache2 restart
+RUN cd /var/www && \
+    /usr/local/bin/composer install --no-dev
